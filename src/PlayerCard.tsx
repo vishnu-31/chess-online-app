@@ -9,10 +9,10 @@ interface PlayerCardProps {
   color: "white" | "black" ;
 }
 
-const PlayerCard: React.FC<PlayerCardProps> = ({ avatar, name, color }) => {
+const PlayerCard: React.FC<PlayerCardProps> = ({ name, color }) => {
   return (
-    <div className='p-3 bg-gray-600  rounded-xl'>
-    <div className="flex flex-col m-3 items-center text-center">
+    <div className=' m-1 p-2 bg-gray-600 w-[50%] rounded-xl'>
+    <div className="flex md:flex-col m-2 items-center text-center">
             <RxAvatar className={"w-32 h-32"}/>
             <img src={color=="white"? WhiteKingIcon: BlackKingIcon} alt="King Icon" className=' pl-3 w-10 h-10' />
       <h3 style={{ color: "white" }}>{name}</h3>
