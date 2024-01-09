@@ -11,12 +11,10 @@ interface PlayerCardProps {
 
 const PlayerCard: React.FC<PlayerCardProps> = ({ avatar, name, color }) => {
   return (
-    <div className='p-3 bg-stone-600 w-60 rounded-xl'>
-    <div className="flex flex-col m-3">
-        <div className="flex items-center">
-            <RxAvatar className={"w-16 h-16 pr-5"}/>
-            <img src={color=="white"? WhiteKingIcon: BlackKingIcon} alt="King Icon" className='w-10 h-10' />
-        </div>
+    <div className='p-3 bg-gray-600  rounded-xl'>
+    <div className="flex flex-col m-3 items-center text-center">
+            <RxAvatar className={"w-32 h-32"}/>
+            <img src={color=="white"? WhiteKingIcon: BlackKingIcon} alt="King Icon" className=' pl-3 w-10 h-10' />
       <h3 style={{ color: "white" }}>{name}</h3>
       </div>
     </div>
