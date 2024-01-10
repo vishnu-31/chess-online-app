@@ -2,11 +2,11 @@ import React from 'react';
 import { RxAvatar } from "react-icons/rx";
 import BlackKingIcon from "./assets/black-king.svg";
 import WhiteKingIcon from "./assets/white-king.svg"; 
-
+import { colorType } from './App';
 interface PlayerCardProps {
   avatar: string;
   name: string;
-  color: "white" | "black" ;
+  color: colorType ;
 }
 
 const PlayerCard: React.FC<PlayerCardProps> = ({ name, color }) => {
