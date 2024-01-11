@@ -11,16 +11,18 @@ const io = new Server(server,{cors:{
 
 const socketData = {
         name:"Game Data",
-        p1:{name:"", color:"", time:""},
-        p2:{name:"", color:"", time:""},
+        p1:{name:"", color:"", socketId:""},
+        p2:{name:"", color:"", socketId:""},
     };
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+
+
+  socket.on("win", ()=>{
+    socket.broadcast.emit("win")
+  })
 
   socket.on("checkRoom", (room, pname) =>{
-
-    console.log("checkRoom", {room, pname});
 
     let opponentName ="";
 
@@ -30,6 +32,7 @@ io.on('connection', (socket) => {
     }
     else if(socketData.p1.name =="" && socketData.p2.name==""){
       socketData.p1.name= pname;
+      socketData.p1.socketId = socket.id;
       opponentName = socketData.p2.name;
       socketData.name=room;
       socket.join(room);
@@ -39,20 +42,21 @@ io.on('connection', (socket) => {
       if(!socketData.p1.name ==""){
         opponentName = socketData.p1.name;
         socketData.p2.name=pname;
-        socket.broadcast.emit("opponentName", pname);
+        socketData.p2.socketId = socket.id;
         if (socketData.p1.color =="white"){
           otherColor="black";
         }else if(socketData.p1.color=="black"){
           otherColor="white";
         }
       }
-      io.emit("setColor",otherColor)
+      socket.emit("setColor",otherColor)
+      socket.broadcast.emit("opponentName", pname);
+      socket.emit("opponentName",opponentName); 
     }
-    socket.emit("opponentName",opponentName); 
+    
   })
 
   socket.on("putColor", ({playerName, color})=>{
-    console.log("putColor", {playerName, color})
     if(socketData.p1.name== playerName){
       socketData.p1.color=color;
     }
@@ -67,7 +71,11 @@ io.on('connection', (socket) => {
   })
 
   socket.on("disconnect", () =>{
-    console.log("a user disconnected")
+    const socketList = io.in(socketData.name).fetchSockets();
+    if (socketList.length >0){
+      socket.broadcast.emit("abort");
+    } 
+    io.socketsLeave(socketData.name);
   })
 });
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { colorType } from "./App";
 import { Socket } from "socket.io-client";
 
-const CustomChessBoard = ({chess,setOver, socket, color}:{chess:any, setOver:React.Dispatch<boolean>, socket:Socket, color:colorType})=> {
+const CustomChessBoard = ({chess,setStatus, socket, color}:{chess:any, setStatus:React.Dispatch<string>, socket:Socket, color:colorType})=> {
   const [fen, setFen] = useState<string>(chess.fen());
   
   useEffect (()=>{
@@ -23,16 +23,21 @@ const CustomChessBoard = ({chess,setOver, socket, color}:{chess:any, setOver:Rea
     console.log(moveData);
 
     
-    if(validateFen(chess.fen()).ok){
+    if(validateFen(chess.fen()).ok && moveData.color == color.charAt(0)){
       setFen(chess.fen())
       socket.emit("move", {from:sourceSquare, to:targetSquare})
-      setOver(chess.isGameOver())
+      if(chess.isGameOver()){
+        if(chess.isCheckmate()){
+          setStatus("win")
+          socket.emit("win");
+        }
+      }
       console.log("Move successful")
       return true;
     }
     else{
       chess.undo();
-      setFen(chess.fen());
+      console.log("Move failed");
       return false;
     }
   }
