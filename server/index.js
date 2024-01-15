@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on("move", (data)=>{
-    console.log("move", data);
+    //console.log("move", data);
       socket.broadcast.emit("move", data);
   })
 

@@ -1,8 +1,17 @@
 import PlayerCard from "./PlayerCard"
 import { colorType } from "./App"
 
+interface RightColumnInterface {
+    playerName:string; 
+    color:colorType;
+    isYourTurn:boolean; 
+    opponentName:string; 
+    room:string;
+}
 
-export const RightColumn = ({playerName, color, opponentName, room}:{playerName:string; color:colorType; opponentName:string; room:string}) =>{
+
+
+export const RightColumn = ({playerName, color, opponentName, isYourTurn, room}:RightColumnInterface) =>{
     return(
         <div className="md:h-full flex flex-col justify-between md:ml-3 p-3 w-full md:w-[50%]  bg-white rounded-lg">
             <div className=" text-center uppercase font-bold text-lg"> Players</div>
@@ -12,7 +21,8 @@ export const RightColumn = ({playerName, color, opponentName, room}:{playerName:
             </div>
             <div className="flex text-center text-3xl font-semibold justify-center items-center">
                Room Code: {room} 
-            </div>            
+            </div>      
+            <div>{isYourTurn? "Your turn": `${opponentName}'s Turn`}</div>      
         </div>
     )
 } 

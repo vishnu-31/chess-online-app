@@ -13,6 +13,7 @@ function App() {
     const [chess] = useState(new Chess());
     const [status, setStatus] = useState<string>("playing");
     const [isAborted, setIsAborted] = useState<boolean>(false);
+    const [isYourturn, setIsYourTurn] = useState<boolean>(false);
     const [playerName, setPlayerName] = useState<string>("");
     const [opponentName, setOpponentName] = useState<string>("");
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
@@ -24,6 +25,9 @@ function App() {
     
     const chooseColor =(color:colorType) =>{
         setColor(color);
+        if (color =="white"){
+            setIsYourTurn(true);
+        }
         setToChoose(false);
         setDataLoaded(true);
         socket.emit("putColor", {playerName:playerName, color:color})
@@ -45,6 +49,9 @@ function App() {
         socket.on("setColor", (color)=>{
             console.log("setColor", color);
             setColor(color);
+            if (color == "white"){
+                setIsYourTurn(true);
+            }
             setDataLoaded(true);
         });
 
@@ -94,8 +101,8 @@ function App() {
                 }
                 
                     <main className="flex flex-col w-full md:h-full md:flex-row px-5 pt-1">
-                        <CustomChessBoard chess={chess} color={color}  socket={socket} setStatus={setStatus}/>
-                        <RightColumn playerName={playerName} room={room} opponentName={opponentName} color={color} />
+                        <CustomChessBoard chess={chess} color={color}  socket={socket} setIsYourTurn={setIsYourTurn} setStatus={setStatus}/>
+                        <RightColumn playerName={playerName} room={room} isYourTurn={isYourturn} opponentName={opponentName} color={color} />
                     </main>
                 </div>
             }
