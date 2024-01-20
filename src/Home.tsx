@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Socket } from "socket.io-client";
+import { colorType } from "./App";
 
 
 
-type HomeProps = {
+interface HomeProps {
     playerName:string;
     setPlayerName:React.Dispatch<string>;
     room:string;
     setRoom:React.Dispatch<string>;
     toChoose:boolean;
     socket:Socket;
-    chooseColor:CallableFunction;
+    chooseColor:(color:colorType)=>void;
 }
 
 export const Home = ({playerName, setPlayerName, toChoose, socket, chooseColor, room, setRoom}:HomeProps) =>{

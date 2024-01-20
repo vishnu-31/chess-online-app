@@ -2,10 +2,10 @@ import PlayerCard from "./PlayerCard"
 import { colorType } from "./App"
 
 interface RightColumnInterface {
-    playerName:string; 
+    playerName:string;
     color:colorType;
-    isYourTurn:boolean; 
-    opponentName:string; 
+    isYourTurn:boolean;
+    opponentName:string;
     room:string;
 }
 
@@ -17,7 +17,7 @@ export const RightColumn = ({playerName, color, opponentName, isYourTurn, room}:
             <div className=" text-center uppercase font-bold text-lg"> Players</div>
             <div className="flex flex-row md:flex-col justify-around items-center ">
                 <PlayerCard name={playerName}  color={color}/>
-                <PlayerCard name={opponentName===""?"player":opponentName} color={color ==="white"?"black":"white"}/>
+                <PlayerCard name={opponentName==""?"player":opponentName} color={color =="white"?"black":"white"}/>
             </div>
             <div className="flex text-center text-3xl font-semibold justify-center items-center">
                Room Code: {room} 

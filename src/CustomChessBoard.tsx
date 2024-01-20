@@ -1,8 +1,10 @@
 import { Square,validateFen } from "chess.js";
 import { Chessboard } from "react-chessboard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { colorType } from "./App";
 import { Socket } from "socket.io-client";
+import { useAppDispatch, useAppSelector } from "./hooks";
+import { setFen } from "./features/gameData/gameDataSlice";
 
 interface ChessboardInterface {
   chess:any;
@@ -12,14 +14,16 @@ interface ChessboardInterface {
   color:colorType;}
 
 const CustomChessBoard = ({chess,setStatus, setIsYourTurn, socket, color}:ChessboardInterface)=> {
-  const [fen, setFen] = useState<string>(chess.fen());
-  
+  const fen = useAppSelector(state=>state.gameData.fen);
+  const dispatch = useAppDispatch();
   useEffect (()=>{
     //socket functions declaration
 
+    dispatch(setFen(chess.fen()))
+
     socket.on("move", (data:{from:Square, to:Square, turn:string}) =>{
       chess.move(data);
-      setFen(chess.fen());
+      dispatch(setFen(chess.fen()));
       if(data.turn == color[0]){
         setIsYourTurn(true);
       }
@@ -34,7 +38,7 @@ const CustomChessBoard = ({chess,setStatus, setIsYourTurn, socket, color}:Chessb
 
     
     if(validateFen(chess.fen()).ok && moveData.color == color.charAt(0)){
-      setFen(chess.fen())
+      dispatch(setFen(chess.fen()))
       socket.emit("move", {from:sourceSquare, to:targetSquare,turn:chess.turn()})
       setIsYourTurn(false);
       if(chess.isGameOver()){
@@ -55,7 +59,7 @@ const CustomChessBoard = ({chess,setStatus, setIsYourTurn, socket, color}:Chessb
 
 
   return(
-    <div className="w-full md:w-[50%] ">
+    <div className="w-full md:w-[50%]">
     <Chessboard 
       id="BasicBoard"
       position={fen}
